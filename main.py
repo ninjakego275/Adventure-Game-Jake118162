@@ -21,6 +21,7 @@ class Player():
     enemyrun = random.randint(1, 5)
     enemy.distance += enemyrun
     enemy.hunger -= round(enemyrun / 2)
+    print(f"You ran {runamount} blocks, and lost {round(runamount / 2)} hunger points.")
 
   def heal(self, enemy):
     if self.gapples > 0:
@@ -30,7 +31,7 @@ class Player():
         enemyrun = random.randint(1, 5)
         enemy.distance += enemyrun
         enemy.hunger -= round(enemyrun / 2)
-        text = "You ate 1 Golden Appple"
+        text = "You ate 1 Golden Appple.\nYou healed 8 healthpoints and gained 4 hunger points."
         self.gapples -= 1
         return text
       self.health += 20 - self.health
@@ -38,7 +39,7 @@ class Player():
       enemyrun = random.randint(1, 5)
       enemy.distance += enemyrun
       enemy.hunger -= round(enemyrun / 2)
-      text = "You ate 1 Golden Appple"
+      text = "You ate 1 Golden Appple.\nYou healed 8 healthpoints and gained 4 hunger points."
       self.gapples -= 1
       return text
 
@@ -53,7 +54,7 @@ class Player():
         enemyrun = random.randint(1, 5)
         enemy.distance += enemyrun
         enemy.hunger -= round(enemyrun / 2)
-        text = "You ate a steak"
+        text = "You ate a steak.\nYou gained 8 hunger points."
         self.steak -= 1
         return text
       else:
@@ -61,7 +62,7 @@ class Player():
         enemyrun = random.randint(1, 5)
         enemy.distance += enemyrun
         enemy.hunger -= round(enemyrun / 2)
-        text = "You ate a steak"
+        text = "You ate a steak.\nYou gained 8 hunger points."
         self.steak -= 1
         return text
     else:
@@ -96,14 +97,17 @@ class Player():
       print("You don't have any more arrows to shoot.")
 
   def fight(self, target):
-    self.health -= random.randint(1, self.health)
-    target.health -= random.randint(1, target.health)
+    selfdamage = random.randint(1, self.health)
+    self.health -= selfdamage
+    damage = random.randint(1, target.health)
+    target.health -= damage
     enemyrun = random.randint(3, 10)
     selfrun = random.randint(1, 3)
     self.distance += selfrun
     target.distance += enemyrun
     self.hunger -= round(selfrun / 2)
     target.hunger -= round(enemyrun / 2)
+    print(f"You decided to fight with the enemy! You lost {selfdamage} healthpoints and did {damage} damage to the enemy.")
 
   def stats(self):
     print("Actions:\n------------------\nRun: You will run away from your enemy a random amount\nof blocks, which depletes your hunger.\n\nHeal: Eats a Golden Apple if you have one, which heals 8 healthpoints and 4 hunger points.  Your enemy will keep moving behind you.\n\nEat:  Eats a steak which replenishes 8 hunger.\nYour enemy will keep moving while you are eating.\n\nBow Spam:  Shoot the enemy using arrows, damaging them \nand pushing them back based on your accuracy.\n\nFight:  Go into combat with your enemy,\nlosing random amounts of health\nand running a random amount.\n\nStats:  Check your stats and display the different\nactions and what they do.")
@@ -134,10 +138,11 @@ class Player():
       self.hungerlow = True
 
 
-
+print("\n" * 100)
 print("Hello!  Welcome to Jake's Adventure Game.")
 print("To win, you must get 50 blocks away from your enemy, or you must defeat your enemy.")
 print("You have 6 actions you can take along the way.\n------------------\nRun: You will run away from your enemy a random amount\nof blocks, which depletes your hunger.\n\nHeal: Eats a Golden Apple if you have one, which heals 8 healthpoints and 4 hunger points.  Your enemy will keep moving behind you.\n\nEat:  Eats a steak which replenishes 8 hunger.\nYour enemy will keep moving while you are eating.\n\nBow Spam:  Shoot the enemy using arrows, damaging them \nand pushing them back based on your accuracy.\n\nFight:  Go into combat with your enemy,\nlosing random amounts of health\nand running a random amount.\n\nStats:  Check your stats and display the different\nactions and what they do.")
+print("You will start only 5 blocks away from your enemy, so there is no time to waste!\nRUN!!!")
 
 game = True
 while game:
@@ -180,14 +185,17 @@ while game:
     check = player.check(comp)
     if check == "health":
       print("Oh No!  You ran out of health and died.")
+      print(f"You traveled {player.distance} blocks.")
       gametime = False
       continue
     elif check == "hunger":
       print("You ran out of hunger!  The enemy easily caught up to\nyou and killed you.")
+      print(f"You traveled {player.distance} blocks.")
       gametime = False
       continue
     elif check == "distance":
       print("The enemy has closed in.  You have died.")
+      print(f"You traveled {player.distance} blocks.")
       gametime = False
       continue
 
@@ -198,14 +206,17 @@ while game:
       comp.eat(player)
     if compcheck == "health":
       print("Wow!  You defeated your opponent.  You Win!")
+      print(f"You traveled {player.distance} blocks!")
       gametime = False
       continue
     if compcheck == "hunger":
       print("Your enemy ran out of hunger.  You Win!")
+      print(f"You traveled {player.distance} blocks!")
       gametime = False
       continue
     if player.distance - comp.distance >= 50:
       print("You successfully got away!  You Win!")
+      print(f"You traveled {player.distance} blocks!")
       gametime = False
       continue
 
